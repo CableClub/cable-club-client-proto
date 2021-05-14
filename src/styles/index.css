@@ -3,10 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  /* typography rules */
+
+  /* sizing */
   h1 {
     @apply text-4xl;
   }
   h2 {
     @apply text-3xl;
   }
+
+  /* custom fonts */
+  @import url(../fonts/8bitoperator/stylesheet.css);
 }
