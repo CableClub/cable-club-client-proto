@@ -1,5 +1,6 @@
 import {Link, Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 
+import ConnectedSession from './ConnectedSession'
 import JoinSession from './JoinSession'
 import StartSession from './StartSession'
 
@@ -8,6 +9,9 @@ function SessionLanding() {
     <div className="bg-purple-900 rounded-xl p-16 w-1/2">
       <Router>
         <Switch>
+          <Route path="/session">
+            <ConnectedSession />
+          </Route>
           <Route path="/host">
             <StartSession />
           </Route>

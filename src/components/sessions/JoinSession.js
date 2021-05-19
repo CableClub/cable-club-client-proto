@@ -1,22 +1,50 @@
-import {Form, Formik} from 'formik'
 import {
+  ACTIVE_SESSION_STATE,
   RESET_SESSION,
   SEEKING_SESSION_STATE,
   SESSION_INACTIVE_STATE,
   SET_SESSION_CODE,
+  SET_SESSION_STATE,
 } from '../../constants'
+import {Form, Formik} from 'formik'
+import {useContext, useEffect} from 'react'
 
 import {Context} from '../../store'
 import {Link} from 'react-router-dom'
 import loadingGif from '../../assets/img/load.gif'
-import {useContext} from 'react'
+import {useHistory} from 'react-router-dom'
 
 function JoinSession() {
+  // routing
+  const history = useHistory()
+
+  // store
   const {store, dispatch} = useContext(Context)
   const {session} = store
 
+  useEffect(() => {
+    if (session.state === SEEKING_SESSION_STATE) {
+      // Simulate async joining session
+      const timeout = window.setTimeout(() => {
+        console.log('joining session')
+        dispatch({
+          type: SET_SESSION_STATE,
+          state: ACTIVE_SESSION_STATE,
+        })
+        history.replace('/session')
+      }, 2500)
+
+      return () => {
+        window.clearTimeout(timeout)
+      }
+    }
+  }, [dispatch, history, session.state])
+
   let activeComponent
   switch (session.state) {
+    case ACTIVE_SESSION_STATE: {
+      return null
+    }
     case SEEKING_SESSION_STATE: {
       activeComponent = <SeekingSession />
       break
@@ -33,7 +61,7 @@ function JoinSession() {
 }
 
 function SeekingSession() {
-  const {store, dispatch} = useContext(Context)
+  const {dispatch} = useContext(Context)
   return (
     <div className="flex flex-col items-center justify-center space-y-6">
       <h1>Searching for your session...</h1>
