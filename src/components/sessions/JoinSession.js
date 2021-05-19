@@ -1,8 +1,59 @@
 import {Form, Formik} from 'formik'
+import {
+  RESET_SESSION,
+  SEEKING_SESSION_STATE,
+  SESSION_INACTIVE_STATE,
+  SET_SESSION_CODE,
+} from '../../constants'
 
+import {Context} from '../../store'
 import {Link} from 'react-router-dom'
+import loadingGif from '../../assets/img/load.gif'
+import {useContext} from 'react'
 
 function JoinSession() {
+  const {store, dispatch} = useContext(Context)
+  const {session} = store
+
+  let activeComponent
+  switch (session.state) {
+    case SEEKING_SESSION_STATE: {
+      activeComponent = <SeekingSession />
+      break
+    }
+    case SESSION_INACTIVE_STATE: {
+      activeComponent = <SessionCodeForm />
+      break
+    }
+    default:
+      throw new Error('Invalid session state')
+  }
+
+  return activeComponent
+}
+
+function SeekingSession() {
+  const {store, dispatch} = useContext(Context)
+  return (
+    <div className="flex flex-col items-center justify-center space-y-6">
+      <h1>Searching for your session...</h1>
+      <img alt="" src={loadingGif} width="20" />
+      <span
+        className="text-sm underline cursor-pointer"
+        onClick={() => {
+          dispatch({type: RESET_SESSION})
+        }}
+        role="button">
+        Cancel
+      </span>
+    </div>
+  )
+}
+
+function SessionCodeForm() {
+  const {store, dispatch} = useContext(Context)
+  const {session} = store
+
   return (
     <div className="flex flex-col items-center justify-center space-y-6">
       <label htmlFor="code">
@@ -12,7 +63,10 @@ function JoinSession() {
       <Formik
         initialValues={{code: ''}}
         onSubmit={(values, {setSubmitting}) => {
-          console.log(values)
+          dispatch({
+            type: SET_SESSION_CODE,
+            code: values.code,
+          })
           setSubmitting(false)
         }}>
         {({isSubmitting, values, handleChange}) => (
@@ -39,7 +93,11 @@ function JoinSession() {
             />
             <button
               className="font-display text-4xl rounded-md py-3 px-5 bg-gameboy-green-lightest text-gameboy-green-darkest disabled:bg-gameboy-green"
-              disabled={values.code.length < 6 || isSubmitting}
+              disabled={
+                values.code.length < 6 ||
+                isSubmitting ||
+                session.state !== SESSION_INACTIVE_STATE
+              }
               type="submit">
               Go
             </button>
@@ -48,7 +106,7 @@ function JoinSession() {
       </Formik>
 
       <Link className="text-sm underline" to="/">
-        Cancel
+        Go back
       </Link>
     </div>
   )
