@@ -11,10 +11,15 @@ module.exports = {
           lightest: '#9bbc0f',
         },
       },
+      fontFamily: {
+        display: ['"8bitoperatorregular"'],
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['disabled'],
+    },
   },
   plugins: [],
 }
