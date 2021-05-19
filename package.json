@@ -5,6 +5,7 @@
   "author": "Mario Muniz <mario@mariomuniz.com>",
   "license": "Apache-2.0",
   "repository": "git@github.com:CableClub/cable-club-client-proto.git",
+  "homepage": "https://cableclub.github.io/cable-club-client-proto/",
   "dependencies": {
     "@craco/craco": "^6.1.2",
     "@testing-library/jest-dom": "^5.11.4",
