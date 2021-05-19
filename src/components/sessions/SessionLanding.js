@@ -11,8 +11,6 @@ function SessionLanding() {
           <Route path="/host">
             <StartSession />
           </Route>
-        </Switch>
-        <Switch>
           <Route path="/join">
             <JoinSession />
           </Route>
